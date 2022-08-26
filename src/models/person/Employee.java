@@ -1,6 +1,8 @@
-package models;
+package models.person;
 
-public class Employee extends Person{
+import models.person.Person;
+
+public class Employee extends Person {
     private String level;
     private String position;
     private double salary;
@@ -42,6 +44,6 @@ public class Employee extends Person{
 
     @Override
     public String toString() {
-        return super.toString() + String.format("%s,,%s,,%s", level, position, salary);
+        return super.toString() + String.format(",,%s,,%s,,%s", level, position, salary);
     }
 }

@@ -2,26 +2,28 @@ package controllers;
 
 import service.IEmployeeService;
 import service.impl.EmployeeService;
-import utils.InputService;
+import utils.get_set_service.GetService;
 
 public class FuramaController {
     private static final String YOUR_CHOOSE = "Your choose: ";
     private static final IEmployeeService I_EMPLOYEE_SERVICE = new EmployeeService();
-
+    private static final CustomerController CUSTOMER_CONTROLLER = new CustomerController();
+    private static final EmployeeController EMPLOYEE_CONTROLLER = new EmployeeController();
+    private static final FacilityController FACILITY_CONTROLLER = new FacilityController();
     public void displayMainMenu() {
         int choose;
         while (true) {
             showMainMenu();
-            choose = InputService.getNumberInteger(YOUR_CHOOSE, 1, 6);
+            choose = GetService.getNumberInteger(YOUR_CHOOSE, 1, 6);
             switch (choose) {
                 case 1:
-                    employeeMenu();
+                    EMPLOYEE_CONTROLLER.displayMainMenu();
                     break;
                 case 2:
-                    customerMenu();
+                    CUSTOMER_CONTROLLER.displayMainMenu();
                     break;
                 case 3:
-                    facilityMenu();
+                    FACILITY_CONTROLLER.displayMainMenu();
                     break;
                 case 4:
                     bookingMenu();
@@ -40,7 +42,7 @@ public class FuramaController {
         int choose;
         while (true) {
             showPromotionMenu();
-            choose = InputService.getNumberInteger(YOUR_CHOOSE, 1, 3);
+            choose = GetService.getNumberInteger(YOUR_CHOOSE, 1, 3);
             switch (choose) {
                 case 1:
                     break;
@@ -56,7 +58,7 @@ public class FuramaController {
         int choose;
         while (true) {
             showBookingMenu();
-            choose = InputService.getNumberInteger(YOUR_CHOOSE, 1, 6);
+            choose = GetService.getNumberInteger(YOUR_CHOOSE, 1, 6);
             switch (choose) {
                 case 1:
                     break;
@@ -73,64 +75,6 @@ public class FuramaController {
             }
         }
     }
-
-    private void facilityMenu() {
-        int choose;
-        while (true) {
-            showSubMenu("facility");
-            choose = InputService.getNumberInteger(YOUR_CHOOSE, 1, 4);
-            switch (choose) {
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    return;
-            }
-        }
-    }
-
-
-    private void customerMenu() {
-        int choose;
-        while (true) {
-            showSubMenu("customer");
-            choose = InputService.getNumberInteger(YOUR_CHOOSE, 1, 4);
-            switch (choose) {
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    return;
-            }
-        }
-    }
-
-    private void employeeMenu() {
-        int choose;
-        while (true) {
-            showSubMenu("employee");
-            choose = InputService.getNumberInteger(YOUR_CHOOSE, 1, 4);
-            switch (choose) {
-                case 1:
-                    I_EMPLOYEE_SERVICE.display();
-                    break;
-                case 2:
-                    I_EMPLOYEE_SERVICE.add();
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    return;
-            }
-        }
-    }
-
 
     private void showMainMenu() {
         System.out.println("1. Employee Management");

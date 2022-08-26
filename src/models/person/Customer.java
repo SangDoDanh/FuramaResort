@@ -1,6 +1,8 @@
-package models;
+package models.person;
 
-public class Customer extends Person{
+import models.person.Person;
+
+public class Customer extends Person {
     private String rank;
     private String address;
 
@@ -13,8 +15,24 @@ public class Customer extends Person{
         this.address = address;
     }
 
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
-        return super.toString() + String.format("%s,,%s", rank, address);
+        return super.toString() + String.format(",,%s,,%s", rank, address);
     }
 }

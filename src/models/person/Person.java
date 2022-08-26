@@ -1,4 +1,4 @@
-package models;
+package models.person;
 
 import java.util.Objects;
 
@@ -80,7 +80,7 @@ public abstract class Person {
 
     @Override
     public String toString() {
-        return String.format("%s,,%s,,%s,,%s,%s,,%s,,%s",
+        return String.format("%s,,%s,,%s,,%s,,%s,,%s,,%s",
                 id, fullName, dayOfBirth, gender, identity, numberPhone, email);
     }
 
