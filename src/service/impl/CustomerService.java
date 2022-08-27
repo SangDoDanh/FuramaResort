@@ -3,7 +3,7 @@ package service.impl;
 import models.person.Customer;
 import service.ICustomerService;
 import utils.get_set_service.GetService;
-import utils.input.InputService;
+import utils.input.InputPersonService;
 import utils.read_write.ReadFile;
 import utils.read_write.WriteFile;
 
@@ -198,15 +198,15 @@ public class CustomerService implements ICustomerService {
     }
 
     private Customer createCustomer() {
-        InputService.inputCustomer();
-        return new Customer(InputService.id,
-                InputService.fullName,
-                InputService.dayOfBirth,
-                InputService.gender,
-                InputService.identity,
-                InputService.numberPhone,
-                InputService.email,
-                InputService.rank,
-                InputService.address);
+        InputPersonService.inputCustomer();
+        return new Customer(InputPersonService.id,
+                InputPersonService.fullName,
+                InputPersonService.dayOfBirth,
+                InputPersonService.gender,
+                InputPersonService.identity,
+                InputPersonService.numberPhone,
+                InputPersonService.email,
+                InputPersonService.rank,
+                InputPersonService.address);
     }
 }

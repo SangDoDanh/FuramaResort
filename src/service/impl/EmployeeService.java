@@ -3,7 +3,7 @@ package service.impl;
 import models.person.Employee;
 import service.IEmployeeService;
 import utils.get_set_service.GetService;
-import utils.input.InputService;
+import utils.input.InputPersonService;
 import utils.read_write.ReadFile;
 import utils.read_write.WriteFile;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeService implements IEmployeeService {
-    private static String PATH_EMPLOYEE = "src/data/ employee.csv";
+    private static String PATH_EMPLOYEE = "src/data/employee.csv";
     private static List<Employee> employeeList;
 
     @Override
@@ -139,17 +139,17 @@ public class EmployeeService implements IEmployeeService {
     }
 
     private Employee createEmployee() {
-        InputService.inputEmployee();
-        return new Employee(InputService.id,
-                InputService.fullName,
-                InputService.dayOfBirth,
-                InputService.gender,
-                InputService.identity,
-                InputService.numberPhone,
-                InputService.email,
-                InputService.level,
-                InputService.position,
-                InputService.salary);
+        InputPersonService.inputEmployee();
+        return new Employee(InputPersonService.id,
+                InputPersonService.fullName,
+                InputPersonService.dayOfBirth,
+                InputPersonService.gender,
+                InputPersonService.identity,
+                InputPersonService.numberPhone,
+                InputPersonService.email,
+                InputPersonService.level,
+                InputPersonService.position,
+                InputPersonService.salary);
     }
 
     private void showInfo(List<Employee> employeeList) {

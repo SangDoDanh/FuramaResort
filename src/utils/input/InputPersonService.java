@@ -4,7 +4,7 @@ import utils.get_set_service.GetService;
 
 import java.util.Scanner;
 
-public class InputService {
+public class InputPersonService {
     private static Scanner sc = new Scanner(System.in);
     public static String id;
     public static String fullName;

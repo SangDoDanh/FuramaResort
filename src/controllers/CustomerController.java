@@ -29,6 +29,7 @@ public class CustomerController {
         }
     }
     private void showSubMenu(String subName) {
+        System.out.println("---CUSTOMER MANAGEMENT---");
         System.out.println("1. Display list " + subName);
         System.out.println("2. Add new " + subName);
         System.out.println("3. Edit  " + subName);
