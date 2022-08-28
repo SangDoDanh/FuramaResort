@@ -1,8 +1,18 @@
 package utils.get_set_service;
 
+import models.Booking;
+import models.facility.Facility;
+import models.person.Customer;
+import service.IFacilityService;
+import service.impl.BookingService;
+import service.impl.CustomerService;
+import service.impl.FacilityService;
 import utils.exception.DateException;
 import utils.exception.EmptyException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -30,7 +40,7 @@ public class GetService {
 
     public static String getDate(String mes) {
         String result = "";
-        String regexDate = "\\d{1,2}[-|/]\\d{1,2}[-|/]\\d{4}";
+        String regexDate = "\\d{1,2}[-|/]\\d{2}[-|/]\\d{4}";
         boolean isDate = false;
         while (true) {
             try {
@@ -176,6 +186,11 @@ public class GetService {
         choose = getNumberInteger("Your choose: ", 1, 4);
         return rentalStyles[choose - 1];
     }
+    public static String getRentalStyle(String facilityID) {
+        IFacilityService iFacilityService = new FacilityService();
+        Facility facility = iFacilityService.finFacilityByID(facilityID);
+        return facility.getRentalStyle();
+    }
 
     public static String getRomStand() {
         String[] romStand = {"President", "vip", "Normal"};
@@ -183,5 +198,52 @@ public class GetService {
         System.out.println("1. President \t2. vip \t3. Normal");
         choose = getNumberInteger("Your choose: ", 1, 3);
         return romStand[choose - 1];
+    }
+
+    public static LocalDate getLocalDate(String mes) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        String date = getDate(mes);
+        return LocalDate.parse(date, formatter);
+    }
+
+    public static String getCustomerID() {
+        CustomerService customerService = new CustomerService();
+        customerService.display();
+        Customer customer;
+        while (true) {
+            customer = customerService.findCustomerBYID();
+            if(customer != null) {
+                return  customer.getId();
+            }
+        }
+    }
+
+    public static String getFacilityName() {
+        FacilityService facilityService = new FacilityService();
+        facilityService.display();
+        Facility facility;
+        while (true) {
+            facility = facilityService.findFacilityByID();
+            if(facility != null) {
+                return facility.getId();
+            }
+        }
+    }
+
+    public static Booking getBookingByID() {
+        BookingService bookingService = new BookingService();
+        Queue<Booking> bookings;
+        String newBookingID;
+        bookings = bookingService.getBookings();
+        while (true) {
+            bookingService.display();
+            newBookingID = GetService.getStr("Enter new Booking ID: ");
+            for(Booking b : bookings) {
+                if(b.getId().equalsIgnoreCase(newBookingID)) {
+                    return b;
+                }
+            }
+        }
+
     }
 }

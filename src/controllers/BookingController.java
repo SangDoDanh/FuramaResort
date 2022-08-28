@@ -1,12 +1,15 @@
 package controllers;
 
 import service.IBookingService;
+import service.IContactService;
 import service.impl.BookingService;
+import service.impl.ContactService;
 import utils.get_set_service.GetService;
 
 public class BookingController {
     private static final String YOUR_CHOOSE = "Your choose: ";
     private static final IBookingService I_BOOKING_SERVICE = new BookingService();
+    private static final IContactService I_CONTACT_SERVICE = new ContactService();
     public void dislayMainMenu() {
         int choose;
         while (true) {
@@ -17,12 +20,16 @@ public class BookingController {
                     I_BOOKING_SERVICE.add();
                     break;
                 case 2:
+                    I_BOOKING_SERVICE.display();
                     break;
                 case 3:
+                    I_BOOKING_SERVICE.createNewContracts();
                     break;
                 case 4:
+                    I_CONTACT_SERVICE.display();
                     break;
                 case 5:
+                    I_CONTACT_SERVICE.edit();
                     break;
                 case 6:
                     return;
@@ -33,7 +40,7 @@ public class BookingController {
         System.out.println("---BOOKING MANAGEMENT---");
         System.out.println("1. Add new booking");
         System.out.println("2. Display list booking");
-        System.out.println("3. Create new contacts");
+        System.out.println("3. Create new contracts");
         System.out.println("4. Display list contacts");
         System.out.println("5. Edit contacts");
         System.out.println("6. Return main menu");

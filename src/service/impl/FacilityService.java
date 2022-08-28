@@ -10,17 +10,24 @@ import utils.input.InputFacilityService;
 import utils.read_write.ReadFile;
 import utils.read_write.WriteFile;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FacilityService implements IFacilityService {
     private final static String PATH_VILLA = "src/data/villa.csv";
     private final static String PATH_ROOM = "src/data/room.csv";
     private final static String PATH_HOUSE = "src/data/house.csv";
     private final static String[] PATH_FACILITY = {PATH_HOUSE, PATH_VILLA, PATH_ROOM};
-    Map<Facility,Integer> facilityListMap;
+    private static Map<Facility,Integer> facilityListMap;
+
+    public void updateNumberOfUsed(String serviceID) {
+        facilityListMap = readFileFacility(PATH_FACILITY);
+        for(Map.Entry<Facility, Integer> f : facilityListMap.entrySet()) {
+            if(f.getKey().getId().equals(serviceID)) {
+                f.setValue(f.getValue() + 1);
+            }
+        }
+    }
+
     @Override
     public void display() {
         facilityListMap = readFileFacility(PATH_FACILITY);
@@ -203,6 +210,17 @@ public class FacilityService implements IFacilityService {
         }
     }
 
+    @Override
+    public Facility finFacilityByID(String facilityID) {
+        facilityListMap = readFileFacility(PATH_FACILITY);
+        for(Facility facility : facilityListMap.keySet()) {
+            if(facility.getId().equalsIgnoreCase(facilityID)) {
+                return facility;
+            }
+        }
+        return null;
+    }
+
     private void editFacility(Facility facility) {
         if(facility instanceof Villa) {
             editVilla(facility);
@@ -379,7 +397,7 @@ public class FacilityService implements IFacilityService {
     }
 
 
-    private Facility findFacilityByID() {
+    public Facility findFacilityByID() {
         String id = GetService.getStr("Enter id you want to find: ");
         facilityListMap = readFileFacility(PATH_FACILITY);
        for(Facility f : facilityListMap.keySet()) {

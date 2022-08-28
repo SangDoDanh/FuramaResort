@@ -31,6 +31,7 @@ public class Customer extends Person {
         this.address = address;
     }
 
+
     @Override
     public String toString() {
         return super.toString() + String.format(",,%s,,%s", rank, address);

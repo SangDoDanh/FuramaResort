@@ -1,13 +1,12 @@
 package models;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Booking {
     private String id;
-    private LocalDateTime startDay;
-    private LocalDateTime endDay;
+    private LocalDate startDay;
+    private LocalDate endDay;
     private String customerID;
     private String serviceName;
     private String typeOfService;
@@ -15,25 +14,34 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(String id, LocalDateTime startDay, LocalDateTime endDay) {
+    public Booking(String id, LocalDate startDay, LocalDate endDay) {
         this.id = id;
         this.startDay = startDay;
         this.endDay = endDay;
     }
 
-    public LocalDateTime getStartDay() {
+    public Booking(String id, LocalDate startDay, LocalDate endDay, String customerID, String serviceName, String typeOfService) {
+        this.id = id;
+        this.startDay = startDay;
+        this.endDay = endDay;
+        this.customerID = customerID;
+        this.serviceName = serviceName;
+        this.typeOfService = typeOfService;
+    }
+
+    public LocalDate getStartDay() {
         return startDay;
     }
 
-    public void setStartDay(LocalDateTime startDay) {
+    public void setStartDay(LocalDate startDay) {
         this.startDay = startDay;
     }
 
-    public LocalDateTime getEndDay() {
+    public LocalDate getEndDay() {
         return endDay;
     }
 
-    public void setEndDay(LocalDateTime endDay) {
+    public void setEndDay(LocalDate endDay) {
         this.endDay = endDay;
     }
 

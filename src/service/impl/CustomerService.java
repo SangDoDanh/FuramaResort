@@ -12,10 +12,8 @@ import java.util.List;
 
 public class CustomerService implements ICustomerService {
     static final String PATH_CUSTOMER = "src/data/customer.csv";
-    private static List<Customer> customerList;
-
-
-    private List<Customer> readFileCustomer(String path) {
+    private List<Customer> customerList;
+    private static List<Customer> readFileCustomer(String path) {
         List<Customer> customers = new LinkedList<>();
         List<String> customersString = ReadFile.readFile(path);
         String[] propertyOfCustomer;
@@ -149,7 +147,7 @@ public class CustomerService implements ICustomerService {
      * Tìm kiếm vị trí customer theo id
      * @return  vị trí của customer trong customerList, -1 nếu không tìm thấy
      */
-    private int findIndexCustomerByID() {
+    public int findIndexCustomerByID() {
         String id;
         id = GetService.getStr("Enter id you want to find: ");
         for (int i = 0; i < customerList.size(); i++) {
@@ -158,6 +156,27 @@ public class CustomerService implements ICustomerService {
             }
         }
         return -1;
+    }
+    public Customer findCustomerBYID() {
+        String id;
+        customerList = readFileCustomer(PATH_CUSTOMER);
+        id = GetService.getStr("Enter your choice customer id: ");
+        for(Customer c : customerList) {
+            if(c.getId().equalsIgnoreCase(id)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public Customer findCustomerBYID(String customerID) {
+        customerList = readFileCustomer(PATH_CUSTOMER);
+        for(Customer c : customerList) {
+            if(c.getId().equalsIgnoreCase(customerID)) {
+                return c;
+            }
+        }
+        return null;
     }
     private void showInfoCustomerList() {
         System.out.println("CUSTOMER_LIST");
