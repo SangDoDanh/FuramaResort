@@ -3,7 +3,7 @@ package service.impl;
 import models.person.Employee;
 import service.IEmployeeService;
 import utils.get_set_service.GetService;
-import utils.input.InputPersonService;
+import service.input.InputPersonService;
 import utils.read_write.ReadFile;
 import utils.read_write.WriteFile;
 
@@ -11,29 +11,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeService implements IEmployeeService {
-    private static String PATH_EMPLOYEE = "src/data/employee.csv";
+    private static final String PATH_EMPLOYEE = "src/data/employee.csv";
     private static List<Employee> employeeList;
 
     @Override
-    public void display() {
-        employeeList = readFileEmployee(PATH_EMPLOYEE);
-        if (employeeList.size() == 0) {
-            System.out.println("Employee List empty!");
-        } else {
-            showInfo(employeeList);
-        }
-    }
-
-    @Override
     public void add() {
-        Employee e = createEmployee();
         employeeList = readFileEmployee(PATH_EMPLOYEE);
+        Employee e = createEmployee();
         employeeList.add(e);
         System.out.println();
         System.out.println("add success!");
         writeFileEmployee(PATH_EMPLOYEE, employeeList);
     }
 
+    /**
+     * Cập nhật lại các thông tin của employee
+     */
     @Override
     public void edit() {
         employeeList = readFileEmployee(PATH_EMPLOYEE);
@@ -42,7 +35,7 @@ public class EmployeeService implements IEmployeeService {
         employeeIndex = findIndexEmployeeByID();
         if (employeeIndex > -1) {
             e = employeeList.get(employeeIndex);
-            setPropertyEmployee(e);
+            showPropertyEmployee(e);
             writeFileEmployee(PATH_EMPLOYEE, employeeList);
             System.out.println("Update success!");
             display();
@@ -51,9 +44,14 @@ public class EmployeeService implements IEmployeeService {
         }
     }
 
+    /**
+     * Tìm kiếm employee theo id
+     *
+     * @return vị trí của employee trong employeeList
+     */
     private int findIndexEmployeeByID() {
         String id;
-        id = GetService.getStr("Enter id you want to find: ");
+        id = GetService.getStr("Enter employee id you want to find: ");
         for (int i = 0; i < employeeList.size(); i++) {
             if (employeeList.get(i).getId().equals(id)) {
                 return i;
@@ -62,20 +60,34 @@ public class EmployeeService implements IEmployeeService {
         return -1;
     }
 
-    private void setPropertyEmployee(Employee e) {
+    /**
+     * Hiển thị thông tin các thuộc tính của employee
+     *
+     * @param e employee
+     */
+
+    private void showPropertyEmployee(Employee e) {
         int choose;
         String[] propertyEmployee = e.toString().split(",,");
-        String propertyEmployeeString = convertEmployeeToString(propertyEmployee);
+        String propertyEmployeeString;
         while (true) {
+            propertyEmployeeString = convertEmployeeToString(propertyEmployee);
             System.out.println(propertyEmployeeString);
-            System.out.println("10. exit");
+            System.out.printf("%d. exit", propertyEmployee.length);
             choose = GetService.getNumberInteger("Your chose property you want to update: ", 0, 10);
-            if(choose == 10) {
+            if (choose == 10) {
                 break;
             }
             setProperty(e, choose);
         }
     }
+
+    /**
+     * Chuyển thuộc tính employee ở dạng mảng sang dạng chuỗi
+     *
+     * @param propertyEmployee thuộc tính employee dạng mảng
+     * @return thuộc tính employee dạng chuỗi
+     */
     private String convertEmployeeToString(String[] propertyEmployee) {
         StringBuilder propertyEmployeeString = new StringBuilder();
         for (int i = 0; i < propertyEmployee.length; i++) {
@@ -84,6 +96,12 @@ public class EmployeeService implements IEmployeeService {
         return propertyEmployeeString.toString();
     }
 
+    /**
+     * nhập những thay đổi của thuộc tính và cập nhật lại employee
+     *
+     * @param e      employee
+     * @param choose vị trí thuộc tính của employee muốn thay đổi
+     */
     private void setProperty(Employee e, int choose) {
 
         switch (choose) {
@@ -130,6 +148,12 @@ public class EmployeeService implements IEmployeeService {
         }
     }
 
+    /**
+     * Ghi danh sách employeeList xuống file
+     *
+     * @param path      đường dẫn file
+     * @param employees danh sách employee
+     */
     private void writeFileEmployee(String path, List<Employee> employees) {
         List<String> employeeString = new ArrayList<>();
         for (Employee e : employees) {
@@ -150,6 +174,16 @@ public class EmployeeService implements IEmployeeService {
                 InputPersonService.level,
                 InputPersonService.position,
                 InputPersonService.salary);
+    }
+
+    @Override
+    public void display() {
+        employeeList = readFileEmployee(PATH_EMPLOYEE);
+        if (employeeList.size() == 0) {
+            System.out.println("Employee List empty!");
+        } else {
+            showInfo(employeeList);
+        }
     }
 
     private void showInfo(List<Employee> employeeList) {
@@ -187,5 +221,9 @@ public class EmployeeService implements IEmployeeService {
         }
 
         return employees;
+    }
+
+    public List<Employee> getEmployeeList() {
+        return readFileEmployee(PATH_EMPLOYEE);
     }
 }

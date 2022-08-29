@@ -6,7 +6,7 @@ import models.facility.Room;
 import models.facility.Villa;
 import service.IFacilityService;
 import utils.get_set_service.GetService;
-import utils.input.InputFacilityService;
+import service.input.InputFacilityService;
 import utils.read_write.ReadFile;
 import utils.read_write.WriteFile;
 
@@ -149,7 +149,6 @@ public class FacilityService implements IFacilityService {
                     return createRoom();
                 case 4:
                    return null;
-
             }
         }
     }
@@ -406,5 +405,9 @@ public class FacilityService implements IFacilityService {
            }
        }
        return null;
+    }
+
+    public Map<Facility, Integer> getFacilityList() {
+        return readFileFacility(PATH_FACILITY);
     }
 }

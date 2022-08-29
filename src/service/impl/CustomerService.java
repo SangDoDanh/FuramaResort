@@ -3,7 +3,7 @@ package service.impl;
 import models.person.Customer;
 import service.ICustomerService;
 import utils.get_set_service.GetService;
-import utils.input.InputPersonService;
+import service.input.InputPersonService;
 import utils.read_write.ReadFile;
 import utils.read_write.WriteFile;
 
@@ -13,9 +13,9 @@ import java.util.List;
 public class CustomerService implements ICustomerService {
     static final String PATH_CUSTOMER = "src/data/customer.csv";
     private List<Customer> customerList;
-    private static List<Customer> readFileCustomer(String path) {
+    private static List<Customer> readFileCustomer() {
         List<Customer> customers = new LinkedList<>();
-        List<String> customersString = ReadFile.readFile(path);
+        List<String> customersString = ReadFile.readFile(CustomerService.PATH_CUSTOMER);
         String[] propertyOfCustomer;
         for (String customerString : customersString) {
             propertyOfCustomer = customerString.split(",,");
@@ -33,7 +33,7 @@ public class CustomerService implements ICustomerService {
     }
     @Override
     public void display() {
-        customerList = readFileCustomer(PATH_CUSTOMER);
+        customerList = readFileCustomer();
         if(customerList.size() == 0) {
             System.out.println("Customer list is empty!");
         } else {
@@ -49,14 +49,14 @@ public class CustomerService implements ICustomerService {
      * lưu lại và hiển thị
      */
     public void edit() {
-        customerList = readFileCustomer(PATH_CUSTOMER);
+        customerList = readFileCustomer();
         int customerIndex;
         Customer c;
         customerIndex = findIndexCustomerByID();
         if (customerIndex > -1) {
             c = customerList.get(customerIndex);
             setPropertyCustomer(c);
-            writeFileCustomer(PATH_CUSTOMER, customerList);
+            writeFileCustomer(customerList);
             System.out.println("Update success!");
             display();
         } else {
@@ -71,8 +71,9 @@ public class CustomerService implements ICustomerService {
     private void setPropertyCustomer(Customer c) {
         int choose;
         String[] propertyCustomer = c.toString().split(",,");
-        String propertyCustomerString = convertCustomerToString(propertyCustomer);
+        String propertyCustomerString;
         while (true) {
+            propertyCustomerString = convertCustomerToString(propertyCustomer);
             System.out.println(propertyCustomerString);
             System.out.println("9. exit");
             choose = GetService.getNumberInteger("Your chose property you want to update: ", 0, 10);
@@ -91,42 +92,42 @@ public class CustomerService implements ICustomerService {
     private void setProperty(Customer c, int choose) {
 
         switch (choose) {
-            case 0:
+            case 0 -> {
                 String id = GetService.getStr("Enter new ID: ");
                 c.setId(id);
-                break;
-            case 1:
+            }
+            case 1 -> {
                 String name = GetService.getName("Enter new full name: ");
                 c.setFullName(name);
-                break;
-            case 2:
+            }
+            case 2 -> {
                 String dayOfBirth = GetService.getDate("Enter new day of birth: ");
                 c.setDayOfBirth(dayOfBirth);
-                break;
-            case 3:
+            }
+            case 3 -> {
                 String gender = GetService.getGender();
                 c.setGender(gender);
-                break;
-            case 4:
+            }
+            case 4 -> {
                 String identity = GetService.getStr("Enter new identity: ");
                 c.setIdentity(identity);
-                break;
-            case 5:
+            }
+            case 5 -> {
                 String phoneNumber = GetService.getPhoneNumber("Enter new phone number: ");
                 c.setNumberPhone(phoneNumber);
-                break;
-            case 6:
+            }
+            case 6 -> {
                 String email = GetService.getEmail("Enter new email: ");
                 c.setEmail(email);
-                break;
-            case 7:
+            }
+            case 7 -> {
                 String rank = GetService.getRank();
                 c.setRank(rank);
-                break;
-            case 8:
+            }
+            case 8 -> {
                 String address = GetService.getStr("Enter new address:");
                 c.setAddress(address);
-                break;
+            }
         }
     }
 
@@ -138,7 +139,7 @@ public class CustomerService implements ICustomerService {
     private String convertCustomerToString(String[] propertyCustomer) {
         StringBuilder propertyCustomerString = new StringBuilder();
         for (int i = 0; i < propertyCustomer.length; i++) {
-            propertyCustomerString.append(i + ".[" + propertyCustomer[i] + "]\t");
+            propertyCustomerString.append(i).append(".[").append(propertyCustomer[i]).append("]\t");
         }
         return propertyCustomerString.toString();
     }
@@ -159,7 +160,7 @@ public class CustomerService implements ICustomerService {
     }
     public Customer findCustomerBYID() {
         String id;
-        customerList = readFileCustomer(PATH_CUSTOMER);
+        customerList = readFileCustomer();
         id = GetService.getStr("Enter your choice customer id: ");
         for(Customer c : customerList) {
             if(c.getId().equalsIgnoreCase(id)) {
@@ -168,9 +169,8 @@ public class CustomerService implements ICustomerService {
         }
         return null;
     }
-
     public Customer findCustomerBYID(String customerID) {
-        customerList = readFileCustomer(PATH_CUSTOMER);
+        customerList = readFileCustomer();
         for(Customer c : customerList) {
             if(c.getId().equalsIgnoreCase(customerID)) {
                 return c;
@@ -183,7 +183,7 @@ public class CustomerService implements ICustomerService {
         System.out.printf("|%-7s|%-20s|%-12s|%-7s|%-10s|%-10s|%-25s|%-12s|%-12s|\n",
                 "ID", "NAME", "DAY_OF_BIRTH", "GENDER", "IDENTITY",
                 "PHONE", "EMAIL", "RANK", "ADDRESS");
-        String infoC = "";
+        String infoC;
         for (Customer c : customerList) {
             infoC = String.format("|%-7s|%-20s|%-12s|%-7s|%-10s|%-10s|%-25s|%-12s|%-12s|",
                     c.getId(), c.getFullName(), c.getDayOfBirth(), c.getGender(), c.getIdentity(),
@@ -200,20 +200,20 @@ public class CustomerService implements ICustomerService {
     @Override
     public void add() {
         Customer e = createCustomer();
-        customerList = readFileCustomer(PATH_CUSTOMER);
+        customerList = readFileCustomer();
         customerList.add(e);
         System.out.println();
         System.out.println("add success!");
-        writeFileCustomer(PATH_CUSTOMER, customerList);
+        writeFileCustomer(customerList);
         display();
     }
 
-    private void writeFileCustomer(String pathCustomer, List<Customer> customerList) {
+    private void writeFileCustomer(List<Customer> customerList) {
         List<String> customersString = new LinkedList<>();
         for(Customer c: customerList) {
             customersString.add(c.toString());
         }
-        WriteFile.writeFile(pathCustomer, customersString);
+        WriteFile.writeFile(CustomerService.PATH_CUSTOMER, customersString);
     }
 
     private Customer createCustomer() {
@@ -227,5 +227,9 @@ public class CustomerService implements ICustomerService {
                 InputPersonService.email,
                 InputPersonService.rank,
                 InputPersonService.address);
+    }
+
+    public List<Customer> getCustomerList() {
+        return readFileCustomer();
     }
 }

@@ -59,6 +59,33 @@ public class GetService {
         }
         return result;
     }
+    public static String getDate(String mes, int age) {
+        String result;
+        String regexDate = "\\d{1,2}[-|/]\\d{2}[-|/]\\d{4}";
+        int year = LocalDate.now().getYear();
+        while (true) {
+            try {
+                System.out.print(mes);
+                result = sc.nextLine();
+                if (!Pattern.matches(regexDate, result)) {
+                    throw new DateException("please enter format : dd/mm/yyyy");
+                }
+                if(year - getYear(result) < age) {
+                    throw new DateException("Please age > 18");
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return result;
+    }
+
+    private static int getYear(String result) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        LocalDate date = LocalDate.parse(result, formatter);
+        return date.getYear();
+    }
 
     public static int getNumberInteger(String mes, int min, int max) {
         int result;
@@ -106,7 +133,7 @@ public class GetService {
     }
 
     public static String getName(String mes) {
-        final String REGEX_NAME = "[a-zA-Z\\s]{1,25}";
+        final String REGEX_NAME = "^([A-Z]\\w*\\s*)+$";
         String name ;
         while (true) {
             System.out.print(mes);
@@ -114,7 +141,8 @@ public class GetService {
             if(name.matches(REGEX_NAME)){
                 return name.trim();
             } else {
-                System.out.println("invalid, Enter name again [a-z, A-Z] not number and length > 1:");
+                System.out.println("invalid, Enter name again [a-z, A-Z] and length > 1:");
+                System.out.println("Example: Nguyen Van A, Nguyen Van B, ...");
             }
         }
     }

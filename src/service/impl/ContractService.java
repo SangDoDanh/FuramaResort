@@ -1,6 +1,5 @@
 package service.impl;
 
-import controllers.BookingController;
 import models.Booking;
 import models.Contract;
 import service.IContactService;
@@ -10,13 +9,14 @@ import utils.read_write.WriteFile;
 
 import java.util.*;
 
-public class ContactService implements IContactService {
+public class ContractService implements IContactService {
     private static final String PATH_CONTRACT = "src/data/contract.csv";
     private static Queue<Contract> contracts;
+
     public void display() {
         contracts = readFileContract(PATH_CONTRACT);
         System.out.println("--CONTRACT LIST---");
-        for(Contract ctr: contracts) {
+        for (Contract ctr : contracts) {
             System.out.println(ctr);
         }
     }
@@ -25,7 +25,7 @@ public class ContactService implements IContactService {
     public void edit() {
         String id = GetService.getStr("Enter contract id: ");
         Contract contract = finContractByID(id);
-        if(contract == null) {
+        if (contract == null) {
             System.out.println("Contract is not found!");
         } else {
             setPropertyContract(contract);
@@ -40,14 +40,15 @@ public class ContactService implements IContactService {
         while (true) {
             propertyOfContract = getAllPropertyOfContract(contract);
             System.out.println(propertyOfContract);
-            System.out.printf("%d. exit\n",length);
+            System.out.printf("%d. exit\n", length);
             choice = GetService.getNumberInteger("Choice property you want to edit:", 0, length);
-            if(choice == 5) {
+            if (choice == 5) {
                 break;
             }
             setProperty(choice, contract);
         }
     }
+
     private void setProperty(int choice, Contract contract) {
         switch (choice) {
             case 0:
@@ -64,8 +65,8 @@ public class ContactService implements IContactService {
                 System.out.println("Customer id is updated by booking!");
                 break;
             case 3:
-                 double deposit = GetService.getNumberDouble("Enter ner deposit: ", 0, 100000000);
-                 contract.setDeposit(deposit);
+                double deposit = GetService.getNumberDouble("Enter ner deposit: ", 0, 100000000);
+                contract.setDeposit(deposit);
                 break;
             case 4:
                 double totalPay = GetService.getNumberDouble("Enter ner totalPay: ", 0, 100000000);
@@ -78,15 +79,15 @@ public class ContactService implements IContactService {
         String[] propertyContract = contract.toString().split(",,");
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < propertyContract.length; i++) {
-            result.append(String.format("%d. %s    ",i, propertyContract[i]));
+            result.append(String.format("%d. %s    ", i, propertyContract[i]));
         }
         return result.toString();
     }
 
     private Contract finContractByID(String id) {
         contracts = readFileContract(PATH_CONTRACT);
-        for(Contract ctr : contracts) {
-            if(ctr.getId().equalsIgnoreCase(id)) {
+        for (Contract ctr : contracts) {
+            if (ctr.getId().equalsIgnoreCase(id)) {
                 return ctr;
             }
         }
@@ -97,6 +98,11 @@ public class ContactService implements IContactService {
 
     }
 
+    /**
+     * Tạo hợp đồng cho Booking
+     *
+     * @param bookingsToContract Booking
+     */
     @Override
     public void createContract(Booking bookingsToContract) {
         contracts = readFileContract(PATH_CONTRACT);
@@ -109,7 +115,7 @@ public class ContactService implements IContactService {
                 deposit,
                 totalPay));
         BookingService.bookingsToContracted.add(id);
-        writeFile(contracts,PATH_CONTRACT);
+        writeFile(contracts, PATH_CONTRACT);
         System.out.println("Create new contract success!");
     }
 
@@ -117,7 +123,7 @@ public class ContactService implements IContactService {
         List<String> contractString = ReadFile.readFile(pathContract);
         Queue<Contract> contractQueue = new LinkedList<>();
         String[] propertyOfContract;
-        for(String c : contractString) {
+        for (String c : contractString) {
             propertyOfContract = c.split(",,");
             contractQueue.offer(new Contract(propertyOfContract[0],
                     propertyOfContract[1],
@@ -127,9 +133,10 @@ public class ContactService implements IContactService {
         }
         return contractQueue;
     }
+
     private void writeFile(Queue<Contract> contractQueue, String path) {
         List<String> contractString = new ArrayList<>();
-        for(Contract c : contractQueue) {
+        for (Contract c : contractQueue) {
             contractString.add(c.toString());
         }
         WriteFile.writeFile(path, contractString);

@@ -3,7 +3,7 @@ package service.impl;
 import models.Booking;
 import service.IBookingService;
 import service.IContactService;
-import utils.input.InputBookingService;
+import service.input.InputBookingService;
 import utils.read_write.ReadFile;
 import utils.read_write.WriteFile;
 
@@ -17,7 +17,7 @@ public class BookingService implements IBookingService {
      * bookingsToContract: Danh sách booking có thể lập hợp đồng
      * bookingsToContracted: danh sách booking đã được lập hợp đồng
      */
-    private static Queue<Booking> bookingsToContract = new PriorityQueue<>((o1, o2) -> {
+    private static final Queue<Booking> bookingsToContract = new PriorityQueue<>((o1, o2) -> {
         if (o1.getStartDay().getYear() > o2.getStartDay().getYear()) {
             return 1;
         } else if (o1.getStartDay().getYear() < o2.getStartDay().getYear()) {
@@ -40,15 +40,23 @@ public class BookingService implements IBookingService {
     public static List<String> bookingsToContracted = new ArrayList<>();
     public static Queue<Booking> bookingQueue;
 
+    public Queue<Booking> getBookingList() {
+        return readFileBooking(PATH_BOOKING);
+    }
+
     @Override
     public void display() {
         System.out.println("---BOOKING LIST---");
         bookingQueue = readFileBooking(PATH_BOOKING);
-        for(Booking b : bookingQueue) {
+        for (Booking b : bookingQueue) {
             System.out.println(b);
         }
     }
 
+    /**
+     * Thêm mới Booking vào danh sách booking sử dụng Queue
+     * hiển thị danh sách booking sau khi thêm mới thành công
+     */
     @Override
     public void add() {
         bookingQueue = readFileBooking(PATH_BOOKING);
@@ -60,9 +68,15 @@ public class BookingService implements IBookingService {
         display();
     }
 
+    /**
+     * tạo mới booking
+     *
+     * @return Booking
+     */
+
     private Booking createBooking() {
         InputBookingService.inputBooking();
-        return  new Booking(InputBookingService.id,
+        return new Booking(InputBookingService.id,
                 InputBookingService.startDay,
                 InputBookingService.endDay,
                 InputBookingService.customerID,
@@ -71,7 +85,6 @@ public class BookingService implements IBookingService {
     }
 
     private Queue<Booking> readFileBooking(String pathBooking) {
-        List<String> bookingString;
         Queue<Booking> bookings = new PriorityQueue<>((o1, o2) -> {
             if (o1.getStartDay().getYear() > o2.getStartDay().getYear()) {
                 return 1;
@@ -92,7 +105,7 @@ public class BookingService implements IBookingService {
             }
             return 0;
         });
-
+        List<String> bookingString;
         bookingString = ReadFile.readFile(PATH_BOOKING);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
         String[] propertyOfBooking;
@@ -107,17 +120,24 @@ public class BookingService implements IBookingService {
         }
         return bookings;
     }
+
     private void writeFileBooking(Queue<Booking> bookings) {
         List<String> bookingsString = new ArrayList<>();
-        for(Booking b : bookings) {
+        for (Booking b : bookings) {
             bookingsString.add(b.toString());
         }
         WriteFile.writeFile(PATH_BOOKING, bookingsString);
     }
+
+    /**
+     * lấy ra danh sách các booking có thể lập hợp đồng
+     *
+     * @return Queue<Booking>
+     */
     private Queue<Booking> getBookingsToContract() {
         bookingQueue = readFileBooking(PATH_BOOKING);
-        for(Booking b : bookingQueue) {
-            if(!checkBookingTOContracted(b.getId()) && checkBookingToContract(b.getServiceName())) {
+        for (Booking b : bookingQueue) {
+            if (!checkBookingTOContracted(b.getId()) && checkBookingToContract(b.getServiceName())) {
                 bookingsToContract.add(b);
             }
         }
@@ -128,26 +148,28 @@ public class BookingService implements IBookingService {
      * Kiểm tra xem booking có thể lập được hợp đồng không,
      * Thuê villa hoặc thuê house thì phải lập hợp đồng
      * thuê room không cần lập hợp đồng
+     *
      * @param serviceName
      * @return
      */
     private boolean checkBookingToContract(String serviceName) {
-        if(serviceName.equalsIgnoreCase("room"))
+        if (serviceName.equalsIgnoreCase("room"))
             return false;
         return true;
     }
 
     /**
      * Kiểm tra xem booking đã được lập hợp đồng chưa
+     *
      * @param id mã booking
      * @return true nếu trong danh sách các booking đã được lập hợp đồng có id này
      */
     private boolean checkBookingTOContracted(String id) {
-        if(bookingsToContracted.size() == 0) {
+        if (bookingsToContracted.size() == 0) {
             return false;
         } else {
-            for(String bookingID : bookingsToContracted) {
-                if(bookingID.equals(id)){
+            for (String bookingID : bookingsToContracted) {
+                if (bookingID.equals(id)) {
                     return true;
                 }
             }
@@ -155,13 +177,16 @@ public class BookingService implements IBookingService {
         return false;
     }
 
+    /**
+     * Tạo hợp đồng cho boooking
+     */
     @Override
     public void createNewContracts() {
         Queue<Booking> contracts = getBookingsToContract();
-        if(contracts.size() == 0) {
+        if (contracts.size() == 0) {
             System.out.println("Booking is empty!");
         } else {
-            IContactService I_CONTRACT_SERVICE = new ContactService();
+            IContactService I_CONTRACT_SERVICE = new ContractService();
             I_CONTRACT_SERVICE.createContract(contracts.poll());
         }
     }
