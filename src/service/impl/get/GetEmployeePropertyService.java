@@ -1,7 +1,7 @@
 package service.impl.get;
 
 import models.person.Employee;
-import service.IGetEmployeePropertyService;
+import service.i_get.IGetEmployeePropertyService;
 import service.impl.EmployeeService;
 import utils.get_set_service.GetService;
 
@@ -35,6 +35,21 @@ public class GetEmployeePropertyService implements IGetEmployeePropertyService {
             }
         }
         return true;
+    }
+    public static String getLevel() {
+        String[] positions = {"University", "High school", "Nothing"};
+        int choose;
+        System.out.println("1. University \t2. High school \t3. Nothing");
+        choose = GetService.getNumberInteger("Your choose: ", 1, 3);
+        return positions[choose - 1];
+    }
+
+    public static String getPosition() {
+        String[] positions = {"Worker", "Manager", "President", "Other"};
+        int choose;
+        System.out.println("1. Worker \t2. Manager \t3. President \t4. Other");
+        choose = GetService.getNumberInteger("Your choose: ", 1, 4);
+        return positions[choose - 1];
     }
 
 }

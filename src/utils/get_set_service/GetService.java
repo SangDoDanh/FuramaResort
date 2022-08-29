@@ -1,18 +1,10 @@
 package utils.get_set_service;
 
-import models.Booking;
-import models.facility.Facility;
-import models.person.Customer;
-import service.IFacilityService;
-import service.impl.BookingService;
-import service.impl.CustomerService;
-import service.impl.FacilityService;
 import utils.exception.DateException;
 import utils.exception.EmptyException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Queue;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -20,7 +12,7 @@ public class GetService {
     private static final Scanner sc = new Scanner(System.in);
 
     public static String getStr(String mes) {
-        String results = "";
+        String results;
         while (true) {
             try {
                 System.out.print(mes);
@@ -31,17 +23,15 @@ public class GetService {
                 break;
             } catch (EmptyException ex) {
                 System.out.println(ex.getMessage());
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
             }
         }
         return results;
     }
 
     public static String getDate(String mes) {
-        String result = "";
+        String result;
         String regexDate = "\\d{1,2}[-|/]\\d{2}[-|/]\\d{4}";
-        boolean isDate = false;
+        boolean isDate;
         while (true) {
             try {
                 System.out.print(mes);
@@ -53,12 +43,17 @@ public class GetService {
                 break;
             } catch (DateException e) {
                 System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
             }
         }
         return result;
     }
+
+    /**
+     *
+     * @param mes
+     * @param age
+     * @return
+     */
     public static String getDate(String mes, int age) {
         String result;
         String regexDate = "\\d{1,2}[-|/]\\d{2}[-|/]\\d{4}";
@@ -70,7 +65,7 @@ public class GetService {
                 if (!Pattern.matches(regexDate, result)) {
                     throw new DateException("please enter format : dd/mm/yyyy");
                 }
-                if(year - getYear(result) < age) {
+                if (year - getYear(result) < age) {
                     throw new DateException("Please age > 18");
                 }
                 break;
@@ -122,9 +117,7 @@ public class GetService {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException e) {
-                System.out.printf("Please enter number [%d...%d]\n", min, max);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.out.printf("Please enter number [%f...%f]\n", min, max);
             }
 
         }
@@ -132,17 +125,25 @@ public class GetService {
         return result;
     }
 
+    /**
+     * Tạo ra một chuỗi được nhập vào từ bàn phím, chữ cái đầu mỗi từ là in hoa
+     * bắt đầu là chữ
+     *
+     * @param mes mô tả cho chuỗi sẽ nhập, ex: nhập vào tên của bạn
+     * @return String
+     */
     public static String getName(String mes) {
         final String REGEX_NAME = "^([A-Z]\\w*\\s*)+$";
-        String name ;
+        String name;
         while (true) {
             System.out.print(mes);
             name = sc.nextLine();
-            if(name.matches(REGEX_NAME)){
+            if (name.matches(REGEX_NAME)) {
                 return name.trim();
+            } else if (name.length() == 0) {
+                System.out.println("Not empty!:");
             } else {
-                System.out.println("invalid, Enter name again [a-z, A-Z] and length > 1:");
-                System.out.println("Example: Nguyen Van A, Nguyen Van B, ...");
+                System.out.println("upper case first character \nExample: Nguyen Van A, Nguyen Van B, ...");
             }
         }
     }
@@ -157,11 +158,11 @@ public class GetService {
 
     public static String getPhoneNumber(String mes) {
         final String REGEX_PHONE_NUMBER = "^0\\d{9,10}$";
-        String phoneNumber ;
+        String phoneNumber;
         while (true) {
             System.out.print(mes);
             phoneNumber = sc.nextLine();
-            if(phoneNumber.matches(REGEX_PHONE_NUMBER)){
+            if (phoneNumber.matches(REGEX_PHONE_NUMBER)) {
                 return phoneNumber.trim();
             } else {
                 System.out.println("invalid, Enter phoneNumber again [0-9] length(10-11) :");
@@ -171,11 +172,11 @@ public class GetService {
 
     public static String getEmail(String mes) {
         final String REGEX_EMAIL = "^[a-zA-Z\\d._%+-]+@[a-zA-Z\\d.-]+\\.[a-zA-Z]{2,6}$";
-        String email ;
+        String email;
         while (true) {
             System.out.print(mes);
             email = sc.nextLine();
-            if(email.matches(REGEX_EMAIL)){
+            if (email.matches(REGEX_EMAIL)) {
                 return email.trim();
             } else {
                 System.out.println("invalid, Enter email again :");
@@ -183,95 +184,59 @@ public class GetService {
         }
     }
 
-    public static String getPosition() {
-        String[] positions = {"Worker", "Manager", "President", "Other"};
-        int choose;
-        System.out.println("1. Worker \t2. Manager \t3. President \t4. Other");
-        choose = getNumberInteger("Your choose: ", 1, 4);
-        return positions[choose - 1];
-    }
-
-    public static String getLevel() {
-        String[] positions = {"University", "High school", "Nothing"};
-        int choose;
-        System.out.println("1. University \t2. High school \t3. Nothing");
-        choose = getNumberInteger("Your choose: ", 1, 3);
-        return positions[choose - 1];
-    }
-
-    public static String getRank() {
-        String[] positions = {"Diamond", "Platinum", "Gold", "Silver", "Member"};
-        int choose;
-        System.out.println("1. Diamond \t2. Platinum \t3. Gold \t4. Silver \t5. Member");
-        choose = getNumberInteger("Your choose: ", 1, 5);
-        return positions[choose - 1];
-    }
-
-    public static String getRentalStyle() {
-        String[] rentalStyles = {"Year", "Month", "Day", "hours"};
-        int choose;
-        System.out.println("1. Year \t2. Month \t3. Day \t4. hours");
-        choose = getNumberInteger("Your choose: ", 1, 4);
-        return rentalStyles[choose - 1];
-    }
-    public static String getRentalStyle(String facilityID) {
-        IFacilityService iFacilityService = new FacilityService();
-        Facility facility = iFacilityService.finFacilityByID(facilityID);
-        return facility.getRentalStyle();
-    }
-
-    public static String getRomStand() {
-        String[] romStand = {"President", "vip", "Normal"};
-        int choose;
-        System.out.println("1. President \t2. vip \t3. Normal");
-        choose = getNumberInteger("Your choose: ", 1, 3);
-        return romStand[choose - 1];
-    }
-
-    public static LocalDate getLocalDate(String mes) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-        String date = getDate(mes);
-        return LocalDate.parse(date, formatter);
-    }
-
-    public static String getCustomerID() {
-        CustomerService customerService = new CustomerService();
-        customerService.display();
-        Customer customer;
+    /**
+     * Tạo mới một LocalDate được nhập vào từ bàn phím
+     * ngày nhập vào phải lớn hơn hoặc bằng ngày giới hạn
+     * Ex:
+     *      Ngày qui định: 1/11/2011
+     *      ngày nhập vào phải lớn hơn ngày giới hạn
+     *
+     * @param mes Câu mô tả cho ngày cần nhập
+     * @param day ngày giới hạn
+     * @return LocalDate
+     */
+    public static LocalDate getDate(String mes, LocalDate day) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String result;
+        String regexDate = "\\d{1,2}/\\d{2}/\\d{4}";
         while (true) {
-            customer = customerService.findCustomerBYID();
-            if(customer != null) {
-                return  customer.getId();
-            }
-        }
-    }
-
-    public static String getFacilityName() {
-        FacilityService facilityService = new FacilityService();
-        facilityService.display();
-        Facility facility;
-        while (true) {
-            facility = facilityService.findFacilityByID();
-            if(facility != null) {
-                return facility.getId();
-            }
-        }
-    }
-
-    public static Booking getBookingByID() {
-        BookingService bookingService = new BookingService();
-        Queue<Booking> bookings;
-        String newBookingID;
-        bookings = bookingService.getBookings();
-        while (true) {
-            bookingService.display();
-            newBookingID = GetService.getStr("Enter new Booking ID: ");
-            for(Booking b : bookings) {
-                if(b.getId().equalsIgnoreCase(newBookingID)) {
-                    return b;
+            try {
+                System.out.print(mes);
+                result = sc.nextLine();
+                if (!Pattern.matches(regexDate, result)) {
+                    throw new DateException("please enter format : dd/mm/yyyy");
                 }
+                if (compareDay(day, LocalDate.parse(result, formatter)) == -1) {
+                    throw new DateException("Starting from " + day);
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
+        return LocalDate.parse(result, formatter);
+    }
 
+    /**
+     * so sánh hai ngày với nhau dựa theo ngày tháng năm
+     *
+     * @param d1 Ngày thứ nhất
+     * @param d2 Ngày thứ hai
+     * @return int 1 => d1 < d2, 0 d1 = d2, -1 d1 < d2
+     */
+    private static int compareDay(LocalDate d1, LocalDate d2) {
+        if (d1.getYear() == d2.getYear() &&
+                d1.getMonthValue() == d2.getMonthValue() &&
+                d1.getDayOfMonth() == d2.getDayOfMonth()) {
+            return 0;
+        }
+        if (d1.getYear() > d2.getYear()) {
+            return -1;
+        } else if (d1.getMonthValue() > d2.getMonthValue()) {
+            return -1;
+        } else if (d1.getDayOfMonth() > d2.getDayOfMonth()) {
+            return -1;
+        }
+        return 1;
     }
 }

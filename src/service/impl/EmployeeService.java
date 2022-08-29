@@ -2,6 +2,7 @@ package service.impl;
 
 import models.person.Employee;
 import service.IEmployeeService;
+import service.impl.get.GetEmployeePropertyService;
 import utils.get_set_service.GetService;
 import service.input.InputPersonService;
 import utils.read_write.ReadFile;
@@ -134,11 +135,11 @@ public class EmployeeService implements IEmployeeService {
                 e.setEmail(email);
                 break;
             case 7:
-                String level = GetService.getLevel();
+                String level = GetEmployeePropertyService.getLevel();
                 e.setLevel(level);
                 break;
             case 8:
-                String position = GetService.getPosition();
+                String position = GetEmployeePropertyService.getPosition();
                 e.setPosition(position);
                 break;
             case 9:

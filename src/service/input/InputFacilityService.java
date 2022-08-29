@@ -31,18 +31,18 @@ public class InputFacilityService {
         usableArea = GetService.getNumberDouble("Enter usable area: ", 4, 10000);
         rentalCosts = GetService.getNumberDouble("Enter rental costs: ", 0, 50000000);
         maximumOfPeople = GetService.getNumberInteger("maximum of people: ", 1, 20);
-        rentalStyle = GetService.getRentalStyle();
+        rentalStyle = GetFacilityPropertyService.getRentalStyle();
     }
     public static void inputVilla() {
        inputFacility(VILLA);
-        roomStand = GetService.getRomStand();
+        roomStand = GetFacilityPropertyService.getRomStand();
         numberOfFloors = GetService.getNumberInteger("Number of floors: ", 1, 10);
         swimmingArea = GetService.getNumberDouble("swimming area: ", 30, 200);
     }
 
     public static void inputHouse() {
         inputFacility(HOUSE);
-        roomStand = GetService.getRomStand();
+        roomStand = GetFacilityPropertyService.getRomStand();
         numberOfFloors = GetService.getNumberInteger("Number of floors", 1, 10);
     }
 

@@ -3,6 +3,7 @@ package service.impl;
 import models.Booking;
 import models.Contract;
 import service.IContactService;
+import service.impl.get.GetBookingPropertyService;
 import utils.get_set_service.GetService;
 import utils.read_write.ReadFile;
 import utils.read_write.WriteFile;
@@ -56,7 +57,7 @@ public class ContractService implements IContactService {
                 contract.setId(id);
                 break;
             case 1:
-                Booking booking = GetService.getBookingByID();
+                Booking booking = GetBookingPropertyService.getChoiceBookingByID();
                 BookingService.bookingsToContracted.remove(booking.getId());
                 contract.setBookingID(booking.getId());
                 contract.setCustomerID(booking.getCustomerID());
@@ -108,7 +109,7 @@ public class ContractService implements IContactService {
         contracts = readFileContract(PATH_CONTRACT);
         String id = GetService.getStr("Enter contract id: ");
         double deposit = GetService.getNumberDouble("Enter deposit: ", 1, 50000000);
-        double totalPay = calTotalPay();
+        double totalPay = calTotalPay(deposit, bookingsToContract);
         contracts.add(new Contract(id,
                 bookingsToContract.getId(),
                 bookingsToContract.getCustomerID(),
@@ -142,7 +143,10 @@ public class ContractService implements IContactService {
         WriteFile.writeFile(path, contractString);
     }
 
-    private double calTotalPay() {
+    private double calTotalPay(double deposit, Booking booking) {
+//        LocalDate startDay = booking.getStartDay();
+//        LocalDate endDay = booking.getEndDay();
+//        startDay.
         return 1;
     }
 

@@ -1,6 +1,8 @@
 package service.input;
 
 import service.impl.get.GetBookingPropertyService;
+import service.impl.get.GetCustomerPropertyService;
+import service.impl.get.GetFacilityPropertyService;
 import utils.get_set_service.GetService;
 
 import java.time.LocalDate;
@@ -14,12 +16,12 @@ public class InputBookingService {
     public static String typeOfService;
 
     public static void inputBooking() {
-        id = new GetBookingPropertyService().getBookingId();
-        id = GetService.getStr("Enter booking id: ");
-        startDay = GetService.getLocalDate("Enter start day: ");
-        endDay = GetService.getLocalDate("Enter end day: ");
-        customerID = GetService.getCustomerID();
-        serviceName = GetService.getFacilityName();
-        typeOfService = GetService.getRentalStyle(serviceName);
+        GetBookingPropertyService getBookingP = new GetBookingPropertyService();
+        id = getBookingP.getBookingId();
+        startDay = GetService.getDate("Enter start day by format dd/mm/yyyy: ", LocalDate.now());
+        endDay = GetService.getDate("Enter end day by format dd/mm/yyyy: ", startDay);
+        customerID = GetCustomerPropertyService.getChoiceCustomerID();
+        serviceName = GetFacilityPropertyService.getFacilityName();
+        typeOfService = GetFacilityPropertyService.getRentalStyle(serviceName);
     }
 }

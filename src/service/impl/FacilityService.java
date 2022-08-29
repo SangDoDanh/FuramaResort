@@ -5,6 +5,7 @@ import models.facility.House;
 import models.facility.Room;
 import models.facility.Villa;
 import service.IFacilityService;
+import service.impl.get.GetFacilityPropertyService;
 import utils.get_set_service.GetService;
 import service.input.InputFacilityService;
 import utils.read_write.ReadFile;
@@ -267,7 +268,7 @@ public class FacilityService implements IFacilityService {
                 facility.setMaximumOfPeople(maximumOfPeople);
             }
             case 5 -> {
-                String rentalStyle = GetService.getRentalStyle();
+                String rentalStyle = GetFacilityPropertyService.getRentalStyle();
                 facility.setRentalStyle(rentalStyle);
             }
             case 6 -> {
@@ -314,11 +315,11 @@ public class FacilityService implements IFacilityService {
                 facility.setMaximumOfPeople(maximumOfPeople);
             }
             case 5 -> {
-                String rentalStyle = GetService.getRentalStyle();
+                String rentalStyle = GetFacilityPropertyService.getRentalStyle();
                 facility.setRentalStyle(rentalStyle);
             }
             case 6 -> {
-                String roomStand = GetService.getRomStand();
+                String roomStand = GetFacilityPropertyService.getRomStand();
                 facility.setRoomStand(roomStand);
             }
             case 7 -> {
@@ -365,11 +366,11 @@ public class FacilityService implements IFacilityService {
                 facility.setMaximumOfPeople(maximumOfPeople);
             }
             case 5 -> {
-                String rentalStyle = GetService.getRentalStyle();
+                String rentalStyle = GetFacilityPropertyService.getRentalStyle();
                 facility.setRentalStyle(rentalStyle);
             }
             case 6 -> {
-                String roomStand = GetService.getRomStand();
+                String roomStand = GetFacilityPropertyService.getRomStand();
                 facility.setRoomStand(roomStand);
             }
             case 7 -> {

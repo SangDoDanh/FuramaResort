@@ -2,6 +2,7 @@ package service.impl;
 
 import models.person.Customer;
 import service.ICustomerService;
+import service.impl.get.GetCustomerPropertyService;
 import utils.get_set_service.GetService;
 import service.input.InputPersonService;
 import utils.read_write.ReadFile;
@@ -121,7 +122,7 @@ public class CustomerService implements ICustomerService {
                 c.setEmail(email);
             }
             case 7 -> {
-                String rank = GetService.getRank();
+                String rank = GetCustomerPropertyService.getRank();
                 c.setRank(rank);
             }
             case 8 -> {

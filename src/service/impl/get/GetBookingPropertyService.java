@@ -1,10 +1,9 @@
 package service.impl.get;
 
 import models.Booking;
-import service.IGetBookingPropertyService;
+import service.i_get.IGetBookingPropertyService;
 import service.impl.BookingService;
 import utils.get_set_service.GetService;
-
 import java.util.Queue;
 
 public class GetBookingPropertyService implements IGetBookingPropertyService {
@@ -32,4 +31,21 @@ public class GetBookingPropertyService implements IGetBookingPropertyService {
         }
         return true;
     }
+
+    public static Booking getChoiceBookingByID() {
+        BookingService bookingService = new BookingService();
+        Queue<Booking> bookings;
+        String newBookingID;
+        bookings = bookingService.getBookings();
+        while (true) {
+            bookingService.display();
+            newBookingID = GetService.getStr("Enter new Booking ID: ");
+            for(Booking b : bookings) {
+                if(b.getId().equalsIgnoreCase(newBookingID)) {
+                    return b;
+                }
+            }
+        }
+    }
+
 }
