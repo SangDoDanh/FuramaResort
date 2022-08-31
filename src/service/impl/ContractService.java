@@ -2,8 +2,10 @@ package service.impl;
 
 import models.Booking;
 import models.Contract;
+import models.facility.Facility;
 import service.IContactService;
 import service.impl.get.GetBookingPropertyService;
+import service.impl.get.GetFacilityPropertyService;
 import utils.get_set_service.GetService;
 import utils.read_write.ReadFile;
 import utils.read_write.WriteFile;
@@ -11,6 +13,17 @@ import utils.read_write.WriteFile;
 import java.util.*;
 
 public class ContractService implements IContactService {
+    private static ContractService instance;
+
+    public ContractService() {
+    }
+    public synchronized static ContractService getInstance() {
+        if(instance == null) {
+            instance = new ContractService();
+        }
+        return instance;
+    }
+
     private static final String PATH_CONTRACT = "src/data/contract.csv";
     private static Queue<Contract> contracts;
 
@@ -108,8 +121,11 @@ public class ContractService implements IContactService {
     public void createContract(Booking bookingsToContract) {
         contracts = readFileContract(PATH_CONTRACT);
         String id = GetService.getStr("Enter contract id: ");
-        double deposit = GetService.getNumberDouble("Enter deposit: ", 1, 50000000);
-        double totalPay = calTotalPay(deposit, bookingsToContract);
+        double totalPay = GetBookingPropertyService.calTotalPay(bookingsToContract);
+        double totalPay10Percent = totalPay * 0.1;
+        double totalPay20Percent = totalPay * 0.2;
+        double deposit = GetService.getNumberDouble(String.format("Enter deposit a bout [%.2f...%.2f]",totalPay10Percent, totalPay20Percent)
+                ,totalPay10Percent, totalPay20Percent);
         contracts.add(new Contract(id,
                 bookingsToContract.getId(),
                 bookingsToContract.getCustomerID(),
@@ -141,13 +157,6 @@ public class ContractService implements IContactService {
             contractString.add(c.toString());
         }
         WriteFile.writeFile(path, contractString);
-    }
-
-    private double calTotalPay(double deposit, Booking booking) {
-//        LocalDate startDay = booking.getStartDay();
-//        LocalDate endDay = booking.getEndDay();
-//        startDay.
-        return 1;
     }
 
 }

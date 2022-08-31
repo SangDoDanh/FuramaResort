@@ -1,12 +1,32 @@
 package service.impl.get;
 
 import models.Booking;
+import models.facility.Facility;
 import service.i_get.IGetBookingPropertyService;
 import service.impl.BookingService;
 import utils.get_set_service.GetService;
+
 import java.util.Queue;
 
 public class GetBookingPropertyService implements IGetBookingPropertyService {
+    public static double calTotalPay(Booking booking) {
+        final int DAY_OF_MONTH = 30;
+        final int DAY_OF_YEAR = 365;
+        long fromDay = booking.getStartDay().toEpochDay();
+        long toDay = booking.getStartDay().toEpochDay();
+        int numberOFDay = (int)Math.abs(fromDay - toDay);
+        Facility facility = GetFacilityPropertyService.getFacility(booking.getServiceName());
+        if(facility == null) {
+            return  1;
+        }
+        if(facility.getRentalStyle().equalsIgnoreCase("month")) {
+            return numberOFDay * (facility.getRentalCosts()/DAY_OF_MONTH);
+        } else if(facility.getRentalStyle().equalsIgnoreCase("day")) {
+            return numberOFDay * (facility.getRentalCosts());
+        }
+        return numberOFDay * (facility.getRentalCosts()/DAY_OF_YEAR);
+    }
+
     @Override
     public String getBookingId() {
          String bookingId;
@@ -47,5 +67,6 @@ public class GetBookingPropertyService implements IGetBookingPropertyService {
             }
         }
     }
+
 
 }

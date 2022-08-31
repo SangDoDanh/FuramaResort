@@ -5,13 +5,13 @@ import service.impl.EmployeeService;
 import utils.get_set_service.GetService;
 
 public class EmployeeController {
-    private static final IEmployeeService I_EMPLOYEE_SERVICE = new EmployeeService();
+    private static final IEmployeeService I_EMPLOYEE_SERVICE = EmployeeService.getInstance();
     private static final String YOUR_CHOOSE = "Your choose: ";
 
     public void displayMainMenu() {
         int choose;
         while (true) {
-            showSubMenu("employee");
+            showSubMenu();
             choose = GetService.getNumberInteger(YOUR_CHOOSE, 1, 4);
             switch (choose) {
                 case 1:
@@ -28,11 +28,11 @@ public class EmployeeController {
             }
         }
     }
-    private void showSubMenu(String subName) {
+    private void showSubMenu() {
         System.out.println("---EMPLOYEE MANAGEMENT---");
-        System.out.println("1. Display list " + subName);
-        System.out.println("2. Add new " + subName);
-        System.out.println("3. Edit  " + subName);
+        System.out.println("1. Display list employee");
+        System.out.println("2. Add new employee");
+        System.out.println("3. Edit employee");
         System.out.println("4. return main menu ");
     }
 }

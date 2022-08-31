@@ -12,42 +12,34 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class BookingService implements IBookingService {
+    private static BookingService instance;
+
+    public BookingService() {
+    }
+    public synchronized static BookingService getInstance() {
+        if(instance == null) {
+            instance = new BookingService();
+        }
+        return instance;
+    }
+
     private static final String PATH_BOOKING = "src/data/booking.csv";
     /**
      * bookingsToContract: Danh sách booking có thể lập hợp đồng
      * bookingsToContracted: danh sách booking đã được lập hợp đồng
      */
-    private static final Queue<Booking> bookingsToContract = new PriorityQueue<>((o1, o2) -> {
-        if (o1.getStartDay().getYear() > o2.getStartDay().getYear()) {
-            return 1;
-        } else if (o1.getStartDay().getYear() < o2.getStartDay().getYear()) {
-            return -1;
-        } else {
-            if (o1.getStartDay().getMonthValue() > o2.getStartDay().getMonthValue()) {
-                return 1;
-            } else if (o1.getStartDay().getMonthValue() < o2.getStartDay().getMonthValue()) {
-                return -1;
-            } else {
-                if (o1.getStartDay().getDayOfMonth() > o2.getStartDay().getDayOfMonth()) {
-                    return 1;
-                } else if (o1.getStartDay().getDayOfMonth() < o2.getStartDay().getDayOfMonth()) {
-                    return -1;
-                }
-            }
-        }
-        return 0;
-    });
+    private static final Queue<Booking> bookingsToContract = new PriorityQueue<>(Comparator.comparing(Booking::getStartDay));
     public static List<String> bookingsToContracted = new ArrayList<>();
     public static Queue<Booking> bookingQueue;
 
     public Queue<Booking> getBookingList() {
-        return readFileBooking(PATH_BOOKING);
+        return readFileBooking();
     }
 
     @Override
     public void display() {
         System.out.println("---BOOKING LIST---");
-        bookingQueue = readFileBooking(PATH_BOOKING);
+        bookingQueue = readFileBooking();
         for (Booking b : bookingQueue) {
             System.out.println(b);
         }
@@ -59,7 +51,7 @@ public class BookingService implements IBookingService {
      */
     @Override
     public void add() {
-        bookingQueue = readFileBooking(PATH_BOOKING);
+        bookingQueue = readFileBooking();
         Booking booking = createBooking();
         new FacilityService().updateNumberOfUsed(booking.getServiceName());
         bookingQueue.offer(booking);
@@ -84,26 +76,12 @@ public class BookingService implements IBookingService {
                 InputBookingService.typeOfService);
     }
 
-    private Queue<Booking> readFileBooking(String pathBooking) {
+    private Queue<Booking> readFileBooking() {
         Queue<Booking> bookings = new PriorityQueue<>((o1, o2) -> {
-            if (o1.getStartDay().getYear() > o2.getStartDay().getYear()) {
-                return 1;
-            } else if (o1.getStartDay().getYear() < o2.getStartDay().getYear()) {
-                return -1;
-            } else {
-                if (o1.getStartDay().getMonthValue() > o2.getStartDay().getMonthValue()) {
-                    return 1;
-                } else if (o1.getStartDay().getMonthValue() < o2.getStartDay().getMonthValue()) {
-                    return -1;
-                } else {
-                    if (o1.getStartDay().getDayOfMonth() > o2.getStartDay().getDayOfMonth()) {
-                        return 1;
-                    } else if (o1.getStartDay().getDayOfMonth() < o2.getStartDay().getDayOfMonth()) {
-                        return -1;
-                    }
-                }
+            if(o1.getStartDay().compareTo(o2.getStartDay()) == 0) {
+                return o1.getEndDay().compareTo(o2.getEndDay());
             }
-            return 0;
+            return o1.getStartDay().compareTo(o2.getStartDay());
         });
         List<String> bookingString;
         bookingString = ReadFile.readFile(PATH_BOOKING);
@@ -135,7 +113,7 @@ public class BookingService implements IBookingService {
      * @return Queue<Booking>
      */
     private Queue<Booking> getBookingsToContract() {
-        bookingQueue = readFileBooking(PATH_BOOKING);
+        bookingQueue = readFileBooking();
         for (Booking b : bookingQueue) {
             if (!checkBookingTOContracted(b.getId()) && checkBookingToContract(b.getServiceName())) {
                 bookingsToContract.add(b);
@@ -149,13 +127,11 @@ public class BookingService implements IBookingService {
      * Thuê villa hoặc thuê house thì phải lập hợp đồng
      * thuê room không cần lập hợp đồng
      *
-     * @param serviceName
-     * @return
+     * @param serviceName mã dịch vụ
+     * @return true -> dịch vụ là villa hoặc house, false -> dịch vụ là room
      */
     private boolean checkBookingToContract(String serviceName) {
-        if (serviceName.equalsIgnoreCase("room"))
-            return false;
-        return true;
+        return !serviceName.equalsIgnoreCase("room");
     }
 
     /**
@@ -192,7 +168,7 @@ public class BookingService implements IBookingService {
     }
 
     public Queue<Booking> getBookings() {
-        bookingQueue = readFileBooking(PATH_BOOKING);
+        bookingQueue = readFileBooking();
         return bookingQueue;
     }
 }

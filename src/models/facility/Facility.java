@@ -7,8 +7,24 @@ public abstract class Facility {
     private double rentalCosts;
     private int maximumOfPeople;
     private String rentalStyle;
+    private boolean isBooking;
+    private int numberOfUsed;
+
+
 
     public Facility() {
+    }
+
+
+    public Facility(String id, String name, double usableArea, double rentalCosts, int maximumOfPeople, String rentalStyle, boolean isBooking, int numberOfUsed) {
+        this.id = id;
+        this.name = name;
+        this.usableArea = usableArea;
+        this.rentalCosts = rentalCosts;
+        this.maximumOfPeople = maximumOfPeople;
+        this.rentalStyle = rentalStyle;
+        this.isBooking = isBooking;
+        this.numberOfUsed = numberOfUsed;
     }
 
     public Facility(String id, String name, double usableArea, double rentalCosts, int maximumOfPeople, String rentalStyle) {
@@ -18,6 +34,21 @@ public abstract class Facility {
         this.rentalCosts = rentalCosts;
         this.maximumOfPeople = maximumOfPeople;
         this.rentalStyle = rentalStyle;
+    }
+
+    public int getNumberOfUsed() {
+        return numberOfUsed;
+    }
+
+    public void setNumberOfUsed(int numberOfUsed) {
+        this.numberOfUsed = numberOfUsed;
+    }
+    public boolean isBooking() {
+        return isBooking;
+    }
+
+    public void setBooking(boolean booking) {
+        isBooking = booking;
     }
 
     public String getId() {

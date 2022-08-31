@@ -12,6 +12,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CustomerService implements ICustomerService {
+    private static CustomerService instance;
+
+    public CustomerService() {
+    }
+
+    public synchronized static CustomerService getInstance() {
+        if(instance == null) {
+            instance = new CustomerService();
+        }
+        return instance;
+    }
+
     static final String PATH_CUSTOMER = "src/data/customer.csv";
     private List<Customer> customerList;
     private static List<Customer> readFileCustomer() {

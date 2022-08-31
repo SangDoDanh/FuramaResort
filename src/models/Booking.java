@@ -10,6 +10,25 @@ public class Booking {
     private String customerID;
     private String serviceName;
     private String typeOfService;
+    private boolean isContract;
+
+    public Booking(String id, LocalDate startDay, LocalDate endDay, String customerID, String serviceName, String typeOfService, boolean isContract) {
+        this.id = id;
+        this.startDay = startDay;
+        this.endDay = endDay;
+        this.customerID = customerID;
+        this.serviceName = serviceName;
+        this.typeOfService = typeOfService;
+        this.isContract = isContract;
+    }
+
+    public boolean isContract() {
+        return isContract;
+    }
+
+    public void setContract(boolean contract) {
+        isContract = contract;
+    }
 
     public Booking() {
     }

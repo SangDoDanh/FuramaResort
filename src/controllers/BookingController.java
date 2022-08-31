@@ -8,8 +8,8 @@ import utils.get_set_service.GetService;
 
 public class BookingController {
     private static final String YOUR_CHOOSE = "Your choose: ";
-    private static final IBookingService I_BOOKING_SERVICE = new BookingService();
-    private static final IContactService I_CONTACT_SERVICE = new ContractService();
+    private static final IBookingService I_BOOKING_SERVICE = BookingService.getInstance();
+    private static final IContactService I_CONTACT_SERVICE = ContractService.getInstance();
     public void dislayMainMenu() {
         int choose;
         while (true) {

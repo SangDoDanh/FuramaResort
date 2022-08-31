@@ -5,7 +5,7 @@ import service.impl.CustomerService;
 import utils.get_set_service.GetService;
 
 public class CustomerController {
-    private static final ICustomerService I_CUSTOMER_SERVICE = new CustomerService();
+    private static final ICustomerService I_CUSTOMER_SERVICE = CustomerService.getInstance();
     private static final String YOUR_CHOOSE = "Your choose: ";
 
     public void displayMainMenu() {

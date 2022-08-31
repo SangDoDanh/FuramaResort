@@ -12,6 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeService implements IEmployeeService {
+    private static EmployeeService instance;
+
+    public EmployeeService() {
+    }
+
+    public static EmployeeService getInstance() {
+        if(instance == null) {
+            instance = new EmployeeService();
+        }
+        return instance;
+    }
     private static final String PATH_EMPLOYEE = "src/data/employee.csv";
     private static List<Employee> employeeList;
 

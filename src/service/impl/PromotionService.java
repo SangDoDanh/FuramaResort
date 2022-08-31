@@ -12,6 +12,17 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 public class PromotionService implements IPromotionService {
+    private static PromotionService instance;
+
+    public PromotionService() {
+    }
+
+    public static PromotionService getInstance() {
+        if(instance == null) {
+            instance = new PromotionService();
+        }
+        return instance;
+    }
     private static final BookingService BOOKING_SERVICE = new BookingService();
     private static final CustomerService CUSTOMER_SERVICE = new CustomerService();
 

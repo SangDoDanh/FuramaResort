@@ -6,14 +6,28 @@ import models.facility.Room;
 import models.facility.Villa;
 import service.IFacilityService;
 import service.impl.get.GetFacilityPropertyService;
-import utils.get_set_service.GetService;
 import service.input.InputFacilityService;
+import utils.get_set_service.GetService;
 import utils.read_write.ReadFile;
 import utils.read_write.WriteFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FacilityService implements IFacilityService {
+    private static FacilityService instance;
+
+    public FacilityService() {
+    }
+
+    public static FacilityService getInstance() {
+        if(instance == null) {
+            instance = new FacilityService();
+        }
+        return instance;
+    }
     private final static String PATH_VILLA = "src/data/villa.csv";
     private final static String PATH_ROOM = "src/data/room.csv";
     private final static String PATH_HOUSE = "src/data/house.csv";
@@ -51,7 +65,7 @@ public class FacilityService implements IFacilityService {
     private void readFileFacilityDetail(String path, Map<Facility, Integer> facilityAll) {
         List<String> facilityString = ReadFile.readFile(path);
         String[] propertyOfFacility;
-        Facility facility = null;
+        Facility facility;
         for(String f : facilityString) {
             propertyOfFacility = f.split(",,");
             if(propertyOfFacility[0].startsWith("VL")) {
@@ -104,7 +118,7 @@ public class FacilityService implements IFacilityService {
         return facility;
     }
 
-    private void writeFileFacility(Map<Facility, Integer> facilityAll) {
+    private void writeFileFacility() {
         List<String> villaString = convertFacilityToString("VL");
         List<String> houseString = convertFacilityToString("HO");
         List<String> roomString = convertFacilityToString("RO");
@@ -131,7 +145,7 @@ public class FacilityService implements IFacilityService {
             return;
         }
         facilityListMap.put(facility, 0);
-        writeFileFacility(facilityListMap);
+        writeFileFacility();
         System.out.println("add facility success!");
         display();
     }
@@ -205,7 +219,7 @@ public class FacilityService implements IFacilityService {
             System.out.println("Facility not found!");
         } else {
             editFacility(facility);
-            writeFileFacility(facilityListMap);
+            writeFileFacility();
             System.out.println("Update success!");
         }
     }

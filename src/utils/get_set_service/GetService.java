@@ -49,10 +49,11 @@ public class GetService {
     }
 
     /**
+     *Lấy ra ngày lớn hơn ngày tháng năm lớn hơn hoặc bằng 18 tuổi
      *
-     * @param mes
-     * @param age
-     * @return
+     * @param mes lời mô tả cho yêu cầu
+     * @param age giới hạn tuổi
+     * @return String
      */
     public static String getDate(String mes, int age) {
         String result;
@@ -66,7 +67,7 @@ public class GetService {
                     throw new DateException("please enter format : dd/mm/yyyy");
                 }
                 if (year - getYear(result) < age) {
-                    throw new DateException("Please age > 18");
+                    throw new DateException("Please age > " + age);
                 }
                 break;
             } catch (Exception e) {
@@ -206,7 +207,7 @@ public class GetService {
                 if (!Pattern.matches(regexDate, result)) {
                     throw new DateException("please enter format : dd/mm/yyyy");
                 }
-                if (compareDay(day, LocalDate.parse(result, formatter)) == -1) {
+                if (day.compareTo(LocalDate.parse(result, formatter)) > 0) {
                     throw new DateException("Starting from " + day);
                 }
                 break;
@@ -215,28 +216,5 @@ public class GetService {
             }
         }
         return LocalDate.parse(result, formatter);
-    }
-
-    /**
-     * so sánh hai ngày với nhau dựa theo ngày tháng năm
-     *
-     * @param d1 Ngày thứ nhất
-     * @param d2 Ngày thứ hai
-     * @return int 1 => d1 < d2, 0 d1 = d2, -1 d1 < d2
-     */
-    private static int compareDay(LocalDate d1, LocalDate d2) {
-        if (d1.getYear() == d2.getYear() &&
-                d1.getMonthValue() == d2.getMonthValue() &&
-                d1.getDayOfMonth() == d2.getDayOfMonth()) {
-            return 0;
-        }
-        if (d1.getYear() > d2.getYear()) {
-            return -1;
-        } else if (d1.getMonthValue() > d2.getMonthValue()) {
-            return -1;
-        } else if (d1.getDayOfMonth() > d2.getDayOfMonth()) {
-            return -1;
-        }
-        return 1;
     }
 }

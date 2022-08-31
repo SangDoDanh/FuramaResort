@@ -9,6 +9,16 @@ import utils.get_set_service.GetService;
 import java.util.Map;
 
 public class GetFacilityPropertyService implements IGetFacilityPropertyService {
+    public static Facility getFacility(String serviceName) {
+        Map<Facility, Integer> facilityList = new FacilityService().getFacilityList();
+        for(Facility f : facilityList.keySet()) {
+            if(f.getId().equalsIgnoreCase(serviceName)){
+                return f;
+            }
+        }
+        return null;
+    }
+
     public String getFacilityId(String facilityId) {
         if(facilityId.equalsIgnoreCase("villa")) {
             return getVillaId();
